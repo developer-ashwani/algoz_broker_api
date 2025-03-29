@@ -1,10 +1,47 @@
 const express = require('express');
 const router = express.Router();
+const { upstoxAuth } = require('../../config/upstox');
 
-router.use('/orders', require('./place_orders'));
-router.use('/profile', require('./profile'));
-router.use('/portfolio', require('./portfolio'));
-router.use('/getOrders', require('./get_orders'));
-router.use('/cancelOrders', require('./cancel_orders'));
+// Import route handlers
+const historicalCandleDataRouter = require('./historical/historical_candle_data');
+const intradayCandleDataRouter = require('./historical/intraday_candle_data');
+const getOrdersRouter = require('./orders/get_orders');
+const modifyOrdersRouter = require('./orders/modify_orders');
+const cancelOrdersRouter = require('./orders/cancel_orders');
+const profileRouter = require('./profile/profile');
+const portfolioRouter = require('./portfolio/portfolio');
+
+// Apply Upstox authentication middleware to all routes
+router.use(upstoxAuth);
+
+// Route definitions
+router.use('/historical', historicalCandleDataRouter);
+router.use('/intraday', intradayCandleDataRouter);
+router.use('/orders', getOrdersRouter);
+router.use('/orders', modifyOrdersRouter);
+router.use('/orders', cancelOrdersRouter);
+router.use('/profile', profileRouter);
+router.use('/portfolio', portfolioRouter);
+
+// Error handling middleware
+router.use((err, req, res, next) => {
+    console.error('Live API Error:', err);
+    res.status(500).json({
+        error: 'Internal Server Error',
+        message: err.message,
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Route validation middleware
+router.use((req, res, next) => {
+    if (!res.headersSent) {
+        res.status(404).json({
+            error: 'Not Found',
+            message: `Route ${req.method} ${req.originalUrl} not found`,
+            timestamp: new Date().toISOString()
+        });
+    }
+});
 
 module.exports = router; 
