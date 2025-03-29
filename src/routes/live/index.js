@@ -10,6 +10,7 @@ const modifyOrdersRouter = require('./orders/modify_orders');
 const cancelOrdersRouter = require('./orders/cancel_orders');
 const profileRouter = require('./profile/profile');
 const portfolioRouter = require('./portfolio/portfolio');
+const websocketRouter = require('./websocket');
 
 // Apply Upstox authentication middleware to all routes
 router.use(upstoxAuth);
@@ -22,6 +23,7 @@ router.use('/orders', modifyOrdersRouter);
 router.use('/orders', cancelOrdersRouter);
 router.use('/profile', profileRouter);
 router.use('/portfolio', portfolioRouter);
+router.use('/websocket', websocketRouter);
 
 // Error handling middleware
 router.use((err, req, res, next) => {
