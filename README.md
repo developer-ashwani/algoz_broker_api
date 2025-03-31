@@ -115,10 +115,10 @@ GET http://localhost:3000/upstox/api/live/option-chain/chain/NSE_INDEX|Nifty%205
 ```bash
 # Get historical candle data
 GET http://localhost:3000/upstox/api/live/historical/1minute?instrumentKey={key}&fromDate={date}&toDate={date}
-GET http://localhost:3000/upstox/api/live/historical/30minute
-GET http://localhost:3000/upstox/api/live/historical/day
-GET http://localhost:3000/upstox/api/live/historical/week
-GET http://localhost:3000/upstox/api/live/historical/month
+GET http://localhost:3000/upstox/api/live/historical/30minute?instrumentKey={key}&fromDate={date}&toDate={date}
+GET http://localhost:3000/upstox/api/live/historical/day?instrumentKey={key}&fromDate={date}&toDate={date}
+GET http://localhost:3000/upstox/api/live/historical/week?instrumentKey={key}&fromDate={date}&toDate={date}
+GET http://localhost:3000/upstox/api/live/historical/month?instrumentKey={key}&fromDate={date}&toDate={date}
 ```
 
 #### Intraday Data
@@ -167,13 +167,12 @@ GET http://localhost:3000/upstox/api/live/profile
 #### Portfolio
 ```bash
 # Get holdings
-GET http://localhost:3000/upstox/api/live/portfolio
+GET http://localhost:3000/upstox/api/live/portfolio/holdings
 
 # Get positions
 GET http://localhost:3000/upstox/api/live/portfolio/positions
 
-# Get trade history
-GET http://localhost:3000/upstox/api/live/portfolio/trades
+
 ```
 
 ## Authentication
