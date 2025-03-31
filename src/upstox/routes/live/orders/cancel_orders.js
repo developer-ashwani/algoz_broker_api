@@ -5,7 +5,7 @@ const { initializeUpstox } = require('../../../config/upstox');
 
 
 // Cancel Order Route
-router.delete('/cancel/:orderId', async (req, res) => {
+router.delete('/:orderId', async (req, res) => {
     try {
         const token = req.headers.authorization?.split(' ')[1] || process.env.UPSTOX_LIVE_TOKEN;
         const client = initializeUpstox(token);

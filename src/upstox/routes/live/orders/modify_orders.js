@@ -4,7 +4,7 @@ const UpstoxClient = require('upstox-js-sdk');
 const { initializeUpstox } = require('../../../config/upstox');
 
 // Modify Order Route
-router.put('/modify', async (req, res) => {
+router.put('/', async (req, res) => {
     try {
         const token = req.headers.authorization?.split(' ')[1] || process.env.UPSTOX_LIVE_TOKEN;
         const client = initializeUpstox(token);

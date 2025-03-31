@@ -1,6 +1,6 @@
 # Upstox Trading API Integration
 
-A Node.js application that integrates with Upstox Trading APIs to place various types of orders in both sandbox and live environments.
+A Node.js application that integrates with Upstox Trading APIs for market data, order management, portfolio tracking, and options trading.
 
 ## Setup
 
@@ -35,324 +35,195 @@ npm start
 
 ## API Endpoints
 
-### Sandbox Environment
+### Order Management
 
-All sandbox endpoints are prefixed with `/api/sandbox/orders`
-
-#### 1. Delivery Market Order
+#### Place Orders
 ```bash
-curl -X POST http://localhost:3000/api/sandbox/orders/deliveryMarketOrder \
--H "Content-Type: application/json" \
--H "Authorization: Bearer your_sandbox_token" \
--d '{
-    "quantity": 1,
-    "product": "D",
-    "validity": "DAY",
-    "instrument_token": "NSE_EQ|INE528G01035",
-    "order_type": "MARKET",
-    "transaction_type": "BUY",
-    "disclosed_quantity": 0,
-    "trigger_price": 0,
-    "is_amo": false
-}'
-```
+# Place a new order
+POST http://localhost:3000/upstox/api/live/orders/place
+Content-Type: application/json
+Authorization: Bearer YOUR_TOKEN
 
-#### 2. Delivery Limit Order
-```bash
-curl -X POST http://localhost:3000/api/sandbox/orders/deliveryLimitOrder \
--H "Content-Type: application/json" \
--H "Authorization: Bearer your_sandbox_token" \
--d '{
-    "quantity": 1,
-    "product": "D",
-    "validity": "DAY",
-    "price": 20.0,
-    "instrument_token": "NSE_EQ|INE528G01035",
-    "order_type": "LIMIT",
-    "transaction_type": "BUY",
-    "disclosed_quantity": 0,
-    "trigger_price": 0,
-    "is_amo": false
-}'
-```
-
-#### 3. Delivery Stop Loss Order
-```bash
-curl -X POST http://localhost:3000/api/sandbox/orders/deliveryStopLossOrder \
--H "Content-Type: application/json" \
--H "Authorization: Bearer your_sandbox_token" \
--d '{
-    "quantity": 1,
-    "product": "D",
-    "validity": "DAY",
-    "price": 20.0,
-    "instrument_token": "NSE_EQ|INE528G01035",
-    "order_type": "SL",
-    "transaction_type": "BUY",
-    "disclosed_quantity": 0,
-    "trigger_price": 19.5,
-    "is_amo": false
-}'
-```
-
-#### 4. Delivery Stop Loss Market Order
-```bash
-curl -X POST http://localhost:3000/api/sandbox/orders/deliveryStopLossOrderMarket \
--H "Content-Type: application/json" \
--H "Authorization: Bearer your_sandbox_token" \
--d '{
-    "quantity": 1,
-    "product": "D",
-    "validity": "DAY",
-    "instrument_token": "NSE_EQ|INE528G01035",
-    "order_type": "SL_M",
-    "transaction_type": "BUY",
-    "disclosed_quantity": 0,
-    "trigger_price": 24.5,
-    "is_amo": false
-}'
-```
-
-#### 5. Intraday Market Order
-```bash
-curl -X POST http://localhost:3000/api/sandbox/orders/intradayMarketOrder \
--H "Content-Type: application/json" \
--H "Authorization: Bearer your_sandbox_token" \
--d '{
-    "quantity": 1,
-    "product": "I",
-    "validity": "DAY",
-    "instrument_token": "NSE_EQ|INE528G01035",
-    "order_type": "MARKET",
-    "transaction_type": "BUY",
-    "disclosed_quantity": 0,
-    "trigger_price": 0,
-    "is_amo": false
-}'
-```
-
-#### 6. Intraday Limit Order
-```bash
-curl -X POST http://localhost:3000/api/sandbox/orders/intradayLimitOrder \
--H "Content-Type: application/json" \
--H "Authorization: Bearer your_sandbox_token" \
--d '{
-    "quantity": 1,
-    "product": "I",
-    "validity": "DAY",
-    "price": 20.0,
-    "instrument_token": "NSE_EQ|INE528G01035",
-    "order_type": "LIMIT",
-    "transaction_type": "BUY",
-    "disclosed_quantity": 0,
-    "trigger_price": 0,
-    "is_amo": false
-}'
-```
-
-### Live Environment
-
-All live orders are handled through a single endpoint: `/api/live/orders`
-
-Example requests for different order types:
-
-#### 1. Delivery Market Order
-```bash
-curl -X POST http://localhost:3000/api/live/orders \
--H "Content-Type: application/json" \
--H "Authorization: Bearer your_live_token" \
--d '{
-    "quantity": 1,
-    "product": "D",
-    "validity": "DAY",
-    "instrument_token": "NSE_EQ|INE528G01035",
-    "order_type": "MARKET",
-    "transaction_type": "BUY",
-    "disclosed_quantity": 0,
-    "trigger_price": 0,
-    "is_amo": false
-}'
-```
-
-[Continue with all other live order examples as shown above]
-
-## Request Parameters
-
-| Parameter | Description | Required | Values |
-|-----------|-------------|----------|---------|
-| quantity | Order quantity | Yes | Integer > 0 |
-| product | Product type | Yes | "D" (Delivery), "I" (Intraday) |
-| validity | Order validity | Yes | "DAY", "IOC" |
-| price | Order price | Yes for LIMIT/SL | Number |
-| instrument_token | Trading symbol | Yes | e.g., "NSE_EQ|INE528G01035" |
-| order_type | Type of order | Yes | "MARKET", "LIMIT", "SL", "SL_M" |
-| transaction_type | Buy or Sell | Yes | "BUY", "SELL" |
-| disclosed_quantity | Disclosed quantity | No | Integer ≥ 0 |
-| trigger_price | Trigger price for SL orders | Yes for SL/SL_M | Number |
-| is_amo | After market order | No | boolean |
-
-## Error Handling
-
-The API returns appropriate HTTP status codes:
-- 200: Success
-- 400: Bad Request (missing or invalid parameters)
-- 401: Unauthorized (invalid token)
-- 500: Server Error
-
-Error response format:
-```json
 {
-    "error": "Error message",
-    "details": "Additional error details if available"
-}
-```
-
-#### Profile Endpoints
-
-1. Get User Profile
-```bash
-curl -X GET http://localhost:3000/api/live/profile \
--H "Content-Type: application/json" \
--H "Authorization: Bearer your_live_token"
-```
-
-
-#### Portfolio Endpoints
-
-1. Get Holdings
-```bash
-curl -X GET http://localhost:3000/api/live/portfolio \
--H "Content-Type: application/json" \
--H "Authorization: Bearer your_live_token"
-```
-
-2. Get Positions
-```bash
-curl -X GET http://localhost:3000/api/live/portfolio/positions \
--H "Content-Type: application/json" \
--H "Authorization: Bearer your_live_token"
-```
-
-3. Get Trade History
-```bash
-curl -X GET http://localhost:3000/api/live/portfolio/trades \
--H "Content-Type: application/json" \
--H "Authorization: Bearer your_live_token"
-```
-
-
-#### 4. Get Order History
-```bash
-curl -X GET http://localhost:3000/api/live/orders/orderHistory/{orderId} \
--H "Content-Type: application/json" \
--H "Authorization: Bearer your_live_token"
-```
-
-Response format:
-```json
-{
-    "order_id": "240112010371054",
-    "status": "COMPLETED",
-    "status_message": "",
-    "order_timestamp": "2024-01-12T09:30:00Z",
-    "exchange_order_id": "1000000000000000",
-    "exchange_time": "2024-01-12T09:30:01Z",
-    "order_type": "MARKET",
-    "instrument_token": "NSE_EQ|INE528G01035",
     "quantity": 1,
+    "product": "D",
+    "validity": "DAY",
     "price": 100.50,
-    "product": "D",
-    "validity": "DAY",
-    "trigger_price": 0,
-    "disclosed_quantity": 0,
+    "instrument_token": "NSE_EQ|INE528G01035",
+    "order_type": "LIMIT",
     "transaction_type": "BUY"
 }
 ```
 
-
-### Modify Orders
-Modify existing orders with updated parameters.
-
-#### Modify Order
+#### Get Orders
 ```bash
-curl -X PUT http://localhost:3000/api/live/orders/modify \
--H "Content-Type: application/json" \
--H "Authorization: Bearer your_live_token" \
--d '{
-    "orderId": "240111010331447",
-    "orderType": "MARKET",
-    "quantity": 1,
-    "price": 0,
-    "triggerPrice": 0,
-    "validity": "DAY",
-    "disclosedQuantity": 0
-}'
+# Get order status by ID
+GET http://localhost:3000/upstox/api/live/orders/get/status/{orderId}
+
+# Get order book
+GET http://localhost:3000/upstox/api/live/orders/get/book
+
+# Get order history
+GET http://localhost:3000/upstox/api/live/orders/get/orderHistory/{orderId}
 ```
 
-Request Body Parameters:
-- `orderId` (required): The ID of the order to modify
-- `orderType`: Type of order (MARKET, LIMIT, SL, SL-M)
-- `quantity`: Number of shares
-- `price`: Price per share (for LIMIT orders)
-- `triggerPrice`: Trigger price (for SL and SL-M orders)
-- `validity`: Order validity (DAY, IOC)
-- `disclosedQuantity`: Quantity to be disclosed
-
-Response format:
-```json
+#### Modify Orders
+```bash
+# Modify an existing order
+PUT http://localhost:3000/upstox/api/live/orders/modify
+Content-Type: application/json
 {
-    "message": "Order modified successfully",
-    "data": {
-        "status": "success",
-        "order_id": "240111010331447"
-    }
+    "orderId": "240111010331447",
+    "quantity": 2,
+    "orderType": "LIMIT",
+    "price": 101.00
 }
 ```
 
-### Cancel Orders
-Cancel existing orders that haven't been executed.
-
-#### Cancel Order
+#### Cancel Orders
 ```bash
-curl -X DELETE http://localhost:3000/api/live/orders/cancel/{orderId} \
--H "Content-Type: application/json" \
--H "Authorization: Bearer your_live_token"
+# Cancel an order
+DELETE http://localhost:3000/upstox/api/live/orders/cancel/{orderId}
 ```
 
-Parameters:
-- `orderId` (required): The ID of the order to cancel
+### Option Chain
 
+#### Get Option Contracts
+```bash
+# Get option contracts without expiry date
+GET http://localhost:3000/upstox/api/live/option-chain/contracts/{instrumentKey}
 
+# Get option contracts with expiry date
+GET http://localhost:3000/upstox/api/live/option-chain/contracts/{instrumentKey}/{expiryDate}
 
-## API Response Codes
+# Example:
+GET http://localhost:3000/upstox/api/live/option-chain/contracts/NSE_INDEX|Nifty%2050/2024-10-31
+```
 
-### Success Responses
-- 200: Request successful
-- 201: Resource created successfully
+#### Get Option Chain
+```bash
+# Get put/call option chain
+GET http://localhost:3000/upstox/api/live/option-chain/chain/{instrumentKey}/{expiryDate}
 
-### Error Responses
-- 400: Bad Request (invalid parameters)
-- 401: Unauthorized (invalid token)
-- 403: Forbidden (insufficient permissions)
-- 404: Resource not found
-- 429: Too many requests
-- 500: Internal server error
+# Example:
+GET http://localhost:3000/upstox/api/live/option-chain/chain/NSE_INDEX|Nifty%2050/2024-10-31
+```
 
-## Response Headers
+### Market Data
 
-All API responses include the following headers:
--H "Content-Type: application/json" \
--H "Authorization: Bearer your_live_token"
+#### Historical Data
+```bash
+# Get historical candle data
+GET http://localhost:3000/upstox/api/live/historical/1minute?instrumentKey={key}&fromDate={date}&toDate={date}
+GET http://localhost:3000/upstox/api/live/historical/30minute
+GET http://localhost:3000/upstox/api/live/historical/day
+GET http://localhost:3000/upstox/api/live/historical/week
+GET http://localhost:3000/upstox/api/live/historical/month
+```
 
+#### Intraday Data
+```bash
+# Get intraday candle data
+GET http://localhost:3000/upstox/api/live/intraday/1minute?instrumentKey={key}
+GET http://localhost:3000/upstox/api/live/intraday/30minute?instrumentKey={key}
+```
+
+### WebSocket Endpoints
+
+```bash
+# Get WebSocket URL
+GET http://localhost:3000/upstox/api/live/websocket/url
+
+# Connect to WebSocket
+POST http://localhost:3000/upstox/api/live/websocket/connect
+
+# Subscribe to market data
+POST http://localhost:3000/upstox/api/live/websocket/subscribe
+Content-Type: application/json
+{
+    "instruments": ["NSE_EQ|INE020B01018"],
+    "mode": "full"
+}
+
+# Unsubscribe from market data
+POST http://localhost:3000/upstox/api/live/websocket/unsubscribe
+Content-Type: application/json
+{
+    "instruments": ["NSE_EQ|INE020B01018"]
+}
+
+# Disconnect WebSocket
+POST http://localhost:3000/upstox/api/live/websocket/disconnect
+```
+
+### Profile and Portfolio
+
+#### Profile
+```bash
+# Get user profile
+GET http://localhost:3000/upstox/api/live/profile
+```
+
+#### Portfolio
+```bash
+# Get holdings
+GET http://localhost:3000/upstox/api/live/portfolio
+
+# Get positions
+GET http://localhost:3000/upstox/api/live/portfolio/positions
+
+# Get trade history
+GET http://localhost:3000/upstox/api/live/portfolio/trades
+```
+
+## Authentication
+
+All API endpoints require authentication using a Bearer token:
+```bash
+Authorization: Bearer YOUR_ACCESS_TOKEN
+```
+
+## Response Formats
+
+### Success Response
+```json
+{
+    "status": "success",
+    "message": "Operation completed successfully",
+    "data": { ... }
+}
+```
+
+### Error Response
+```json
+{
+    "error": "Error type",
+    "message": "Detailed error message",
+    "timestamp": "2024-01-18T10:30:00.000Z"
+}
+```
+
+## Rate Limits
+
+- Market data: 100 requests per minute
+- Order placement: 50 requests per minute
+- Other endpoints: 30 requests per minute
 
 ## Notes
 
-1. Sandbox environment is for testing purposes only
-2. Live environment requires valid API credentials
-3. All prices must be within the valid range for the instrument
-4. For Stop Loss orders, trigger price must be:
-   - Less than limit price for Buy orders
-   - Greater than limit price for Sell orders
+1. All timestamps are in ISO 8601 format
+2. Market data is only available during market hours (9:15 AM - 3:30 PM IST)
+3. WebSocket connection requires re-subscription after disconnection
+4. Option chain data is subject to market timing and exchange rules
+
+## Error Codes
+
+- 400: Bad Request
+- 401: Unauthorized
+- 403: Forbidden
+- 404: Not Found
+- 429: Too Many Requests
+- 500: Internal Server Error
 
 ## License
 
