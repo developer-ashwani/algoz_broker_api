@@ -14,7 +14,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // Import routes
 const upstoxLiveRoutes = require('./upstox/routes/live');
+const fyersRoutes = require('./fyers/routes');
+
+// Mount routes
 app.use('/upstox/api/live', upstoxLiveRoutes);
+app.use('/fyers/api', fyersRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
