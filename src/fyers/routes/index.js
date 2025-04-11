@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Import route handlers
-const userRoutes = require('./Users/user');
+const userRoutes = require('./users/user');
 const portfolioRoutes = require('./portfolio/portfolio');
 const getOrdersRoutes = require('./orders/get_orders');
 const placeOrdersRoutes = require('./orders/place_orders');

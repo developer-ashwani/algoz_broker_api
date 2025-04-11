@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { upstoxAuth } = require('../../config/upstox');
-//HELLO
 // Import route handlers
 const historicalCandleDataRouter = require('./historical/historical_candle_data');
 const intradayCandleDataRouter = require('./historical/intraday_candle_data');

@@ -1,4 +1,4 @@
-// Api for profile, funds, holdings, and logout.
+// Api for profile, funds and logout.
 
 // src/fyers/routes/Users/user.js
 
