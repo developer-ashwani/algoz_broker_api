@@ -16,11 +16,13 @@ app.use(express.urlencoded({ extended: true }));
 const upstoxLiveRoutes = require('./upstox/routes/live');
 const fyersRoutes = require('./fyers/routes');
 const angelRoutes = require('./angel-broking/routes');
+const aliceblueRoutes = require('./aliceblue/routes');
 
 // Mount routes
 app.use('/upstox/api/live', upstoxLiveRoutes);
 app.use('/fyers/api', fyersRoutes);
 app.use('/angel/api', angelRoutes);
+app.use('/aliceblue/api', aliceblueRoutes); 
 
 // Error handling middleware
 app.use((err, req, res, next) => {
